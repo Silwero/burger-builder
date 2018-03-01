@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classes from './Modal.css';
 import Wrapper from '../../../hoc/Wrapper';
 import Backdrop from '../Backdrop/Backdrop';
 
-const modal = (props) => (
-  <Wrapper>
-    <Backdrop show={props.showing} clicked={props.modalClosed} />
-    <div
-      className={classes.Modal}
-      style={{
-        transform: props.showing ? 'translateY(0)' : 'translateY(-100vh)',
-        opacity: props.showing ? '1' : 0
-      }}>
-      {props.children}
-    </div>
-    </Wrapper>
-);
+export class Modal extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.showing !== this.props.showing;
+  }
 
-export default modal;
+  render() {
+    return (
+      <Wrapper>
+        <Backdrop show={this.props.showing} clicked={this.props.modalClosed} />
+        <div
+          className={classes.Modal}
+          style={{
+            transform: this.props.showing ? 'translateY(0)' : 'translateY(-100vh)',
+            opacity: this.props.showing ? '1' : 0,
+            visibility: this.props.showing ? '' : 'hidden',
+          }}>
+          {this.props.children}
+        </div>
+      </Wrapper>
+    );
+  }
+}
+
+export default Modal;
