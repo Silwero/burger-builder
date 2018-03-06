@@ -7,7 +7,6 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import ErrorHandler from '../../hoc/ErrorHandler/ErrorHandler';
-import { Route } from 'react-router-dom';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -26,7 +25,7 @@ export class BurgerBuilder extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://react-burger-builder-d6d11.firebaseio.com/ingredients.json')
+    axios.get('/ingredients')
       .then(response => {
         this.setState({ingredients: response.data});
       });
@@ -45,7 +44,16 @@ export class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = () => {
-    this.props.history.push('/checkout');
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+    }
+    queryParams.push('price=' + this.state.totalPrice);
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      search: '?' + queryString,
+      pathname: '/checkout'
+    });
   }
 
   updatePurchaseState(ingredients) {

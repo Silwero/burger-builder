@@ -3,37 +3,15 @@ import Burger from '../../Burger/Burger';
 import Button from '../../UI/Button/Button';
 import { withRouter } from 'react-router-dom';
 import classes from './CheckoutSummary.css';
-import axios from '../../../axios-orders.js';
 
 export class CheckoutSummary extends Component {
   cancelHandler() {
     this.props.history.goBack();
   }
 
-  sendDataHandler() {
+  nextHandler() {
     this.setState({ loading: true });
-    const order = {
-      ingredients: this.props.ingredients,
-      customer: {
-        name: 'Igor Kleponosov',
-        adress: {
-          street: 'Teststreet 1',
-          country: 'Ukraine',
-          zipCode: '454522'
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethod: 'fastest'
-    }
-    axios.post('/orders.json', order)
-      .then(response => {
-        this.setState({ loading: false, purchaising: false });
-        this.props.history.goBack();
-      })
-      .catch(err => {
-        this.setState({ loading: false, purchaising: false });
-        this.props.history.goBack();
-      });
+    this.props.history.replace('/checkout/contact-data');
   }
 
 
@@ -49,7 +27,7 @@ export class CheckoutSummary extends Component {
           clicked={() => this.cancelHandler()}>Cancel</Button>
         <Button
           btnType="Success"
-          clicked={() => this.sendDataHandler()}>Continue</Button>
+          clicked={() => this.nextHandler()}>Continue</Button>
       </div>
     );
   }
