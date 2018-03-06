@@ -24,10 +24,13 @@ export class BurgerBuilder extends Component {
     loading: false
   }
 
-  componentDidMount() {
-    axios.get('/ingredients')
-      .then(response => {
-        this.setState({ingredients: response.data});
+  componentDidMount () {
+    axios.get( '/ingredients.json' )
+      .then( response => {
+        this.setState( { ingredients: response.data } );
+      })
+      .catch( error => {
+        this.setState( { error: true } );
       });
   }
 
