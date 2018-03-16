@@ -5,6 +5,7 @@ import axios from '../../../axios-orders.js';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import { connect } from 'react-redux';
 
 export class ContactData extends Component {
   state = {
@@ -89,7 +90,10 @@ export class ContactData extends Component {
             }
           ]
         },
-        value: '',
+        validation: {
+          required: true
+        },
+        value: 'fastest',
         valid:true
       },
     },
@@ -108,7 +112,7 @@ export class ContactData extends Component {
     }
 
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       totalPrice: this.props.price,
       userInfo: userInfo
     }
@@ -150,6 +154,7 @@ export class ContactData extends Component {
     const updatedElement = {
       ...updatedOrderForm[inputId]
     }
+
     updatedElement.value = event.target.value;
     updatedElement.valid = this.checkValidity(updatedElement.value, updatedElement.validation);
     updatedElement.touched = true;
@@ -204,4 +209,11 @@ export class ContactData extends Component {
   }
 }
 
-export default withRouter(ContactData);
+const mapStateToProps = state => {
+  return {
+    price: state.totalPrice,
+    ings: state.ingredients
+  }
+};
+
+export default connect(mapStateToProps)(withRouter(ContactData));
