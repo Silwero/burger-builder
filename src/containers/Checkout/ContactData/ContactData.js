@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
+import ErrorHandler from '../../../hoc/ErrorHandler/ErrorHandler';
+import * as actions from '../../../store/actions/index';
 
 export class ContactData extends Component {
   state = {
@@ -97,16 +99,13 @@ export class ContactData extends Component {
         valid:true
       },
     },
-    formIsValid: false,
-    loading: false
+    formIsValid: false
   }
 
   orderHandler = (event) => {
     event.preventDefault();
-    this.setState({loading: true});
 
     const userInfo = {}
-
     for (let key in this.state.orderForm) {
       userInfo[key] = this.state.orderForm[key].value;
     }
@@ -117,14 +116,7 @@ export class ContactData extends Component {
       userInfo: userInfo
     }
 
-    axios.post('/orders.json', order)
-      .then(response => {
-        this.setState({ loading: false });
-        this.props.history.push('/');
-      })
-      .catch(err => {
-        this.setState({loading: false});
-      });
+    this.props.onOrderBurger(order);
   }
 
   checkValidity(value, rules) {
@@ -197,7 +189,7 @@ export class ContactData extends Component {
       </form>
     );
 
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />
     }
     return (
@@ -211,9 +203,16 @@ export class ContactData extends Component {
 
 const mapStateToProps = state => {
   return {
-    price: state.totalPrice,
-    ings: state.ingredients
+    price: state.burgerBuilder.totalPrice,
+    ings: state.burgerBuilder.ingredients,
+    loading: state.order.loading
   }
 };
 
-export default connect(mapStateToProps)(withRouter(ContactData));
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ErrorHandler(ContactData, axios)));

@@ -27,17 +27,22 @@ export class Orders extends Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.state.orders.map(order => (
-            <Order
-              key={order.id}
-              ingredients={order.ingredients}
-              price={+order.totalPrice}/>
-          )
-        )}
-      </div>
-    );
+    let orders = <p style={{textAlign: 'center' }}>No orders</p>
+
+    if (this.state.orders.length) {
+      orders = (
+        <div>
+          {this.state.orders.map(order => (
+              <Order
+                key={order.id}
+                ingredients={order.ingredients}
+                price={+order.totalPrice}/>
+            )
+          )}
+        </div>
+      );
+    }
+    return orders;
   }
 }
 
