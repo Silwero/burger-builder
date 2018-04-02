@@ -115,7 +115,6 @@ export class ContactData extends Component {
       totalPrice: this.props.price,
       userInfo: userInfo
     }
-
     this.props.onOrderBurger(order);
   }
 
