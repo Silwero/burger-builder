@@ -10,11 +10,13 @@ import './index.css';
 import App from './App';
 import borgerBuilderReducer from './store/reducers/BurgerBuilder';
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 
 
 const rootReducers = combineReducers({
   burgerBuilder: borgerBuilderReducer,
-  order: orderReducer
+  order: orderReducer,
+  auth: authReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

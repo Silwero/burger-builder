@@ -8,6 +8,7 @@ import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
 import ErrorHandler from '../../../hoc/ErrorHandler/ErrorHandler';
 import * as actions from '../../../store/actions/index';
+import {scroll} from '../../../components/functional/scroll';
 
 export class ContactData extends Component {
   state = {
@@ -113,9 +114,14 @@ export class ContactData extends Component {
     const order = {
       ingredients: this.props.ings,
       totalPrice: this.props.price,
-      userInfo: userInfo
+      userInfo: userInfo,
+      userId: this.props.userId
     }
-    this.props.onOrderBurger(order);
+    this.props.onOrderBurger(order, this.props.token);
+  }
+
+  componentDidMount() {
+    scroll((document.querySelector('.contact-data').getBoundingClientRect().top + document.body.scrollTop) - 150);
   }
 
   checkValidity(value, rules) {
@@ -171,7 +177,7 @@ export class ContactData extends Component {
     }
 
     let form = (
-      <form>
+      <form className="contact-data">
         {formElementsArray.map(formElement => {
           return <Input
             key={formElement.id}
@@ -204,13 +210,15 @@ const mapStateToProps = state => {
   return {
     price: state.burgerBuilder.totalPrice,
     ings: state.burgerBuilder.ingredients,
-    loading: state.order.loading
+    loading: state.order.loading,
+    token: state.auth.token,
+    userId: state.auth.userId
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData))
+    onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
   };
 };
 
