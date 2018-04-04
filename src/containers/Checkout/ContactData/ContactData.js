@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import ErrorHandler from '../../../hoc/ErrorHandler/ErrorHandler';
 import * as actions from '../../../store/actions/index';
 import {scroll} from '../../../components/functional/scroll';
+import {checkValidity} from '../../../components/functional/utility';
 
 export class ContactData extends Component {
   state = {
@@ -124,26 +125,6 @@ export class ContactData extends Component {
     scroll((document.querySelector('.contact-data').getBoundingClientRect().top + document.body.scrollTop) - 150);
   }
 
-  checkValidity(value, rules) {
-    let isValid = true;
-
-    if (!rules) return;
-
-    if (rules.required) {
-      isValid = value.trim() !== '' && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid
-    }
-
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid
-    }
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, inputId) => {
     const updatedOrderForm = {
       ...this.state.orderForm
@@ -153,7 +134,7 @@ export class ContactData extends Component {
     }
 
     updatedElement.value = event.target.value;
-    updatedElement.valid = this.checkValidity(updatedElement.value, updatedElement.validation);
+    updatedElement.valid = checkValidity(updatedElement.value, updatedElement.validation);
     updatedElement.touched = true;
     updatedOrderForm[inputId] = updatedElement;
 

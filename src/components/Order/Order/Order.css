@@ -6,3 +6,12 @@
   padding: 15px;
   margin: 10px auto;
 }
+
+@media (max-width: 767px) {
+  .Order span {
+    margin-bottom: 16px !important;
+  }
+  .Order p {
+    margin-bottom: 0 !important;
+  }
+}
